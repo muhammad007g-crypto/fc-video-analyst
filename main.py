@@ -180,14 +180,19 @@ Use clear language and actionable advice.
         </body></html>
         """)
 
-    except Exception:
+    
+    except Exception as exc:
+        import logging
+        logging.exception("Gemini gameplay analysis failed")
+        error_message = html.escape(str(exc))
         return HTMLResponse(
             "<h2>Analysis failed</h2>"
-            "<p>Check your Render logs for the error. "
-            "Verify your Gemini API access and try a shorter video.</p>"
+            "<p>Check your Render logs for details.</p>"
+            f"<pre>{error_message}</pre>"
             '<p><a href="/">Return to FC Video Analyst</a></p>',
             status_code=500
         )
+
 
     finally:
         if temp_path and os.path.exists(temp_path):
